@@ -1,6 +1,6 @@
 import sys
 import yaml
-print("YAML version:", yaml.__version__)
+#print("YAML version:", yaml.__version__)
 import argparse
 from core.context import Context
 from core.orchestrator import Orchestrator
@@ -40,38 +40,104 @@ def write_log(filename, results, mitre_hits, risk):
         f.write(f"Score: {risk['score']}\n")
         f.write(f"Level: {risk['level']}\n")
 
+def print_client_assets(data: dict) -> None:
+    client = data.get("client", {})
+    assets = data.get("assets", {})
+
+    network = assets.get("network", {})
+    web = assets.get("web", {})
+    endpoints = assets.get("endpoints", {})
+    pos = assets.get("pos_systems", {})
+
+    print("=" * 60)
+    print("CLIENT ASSET OVERVIEW")
+    print("=" * 60)
+
+    print("\n[ Client Information ]")
+    print(f"Name     : {client.get('name', 'N/A')}")
+    print(f"Category : {client.get('category', 'N/A')}")
+
+    print("\n[ Network ]")
+    for r in network.get("ranges", []):
+        print(f" - Range: {r}")
+
+    print("\n[ Web Domains ]")
+    for d in web.get("domains", []):
+        print(f" - {d}")
+
+    print("\n[ Endpoints ]")
+    for ws in endpoints.get("workstations", []):
+        print(f" - {ws.get('ip')}")
+
+    print("\n[ POS Systems ]")
+    for p in pos.get("list", []):
+        print(f" - {p.get('ip')}")
+
+    print("\n" + "=" * 60)
+
+    
 def build_context(args):
-   """
-   Costruisce il contesto cliente combinando:
-   - file input (se presente)
-   - parametri CLI (che hanno precedenza)
-   """
-   data = {}
-   if args.input_file:
-       data = load_yaml(args.input_file)
-   client_data = data.get("client", {})
-   assets = data.get("assets", {})
-   metadata = data.get("metadata", {})
-# Override da CLI
-   if args.client:
-       client_data["name"] = args.client
-   if args.category:
-       client_data["category"] = args.category
-   if args.network_range:
-       assets["network_range"] = args.network_range
-   if args.web_domain:
-       assets["web_domain"] = args.web_domain
-   if args.endpoints:
-       assets["endpoints"] = args.endpoints.split(",")
-   if args.pos:
-       assets["pos_list"] = args.pos.split(",")
-   print(client_data)
-   return Context(
-       name=client_data["name"],
-       category=client_data["category"],
-       assets=assets,
-       extra=metadata
-   )
+    """
+    Costruisce il contesto cliente combinando:
+    - file input YAML (master template)
+    - parametri CLI (che hanno precedenza)
+    """
+
+    raw = {}
+    if args.input_file:
+        raw = load_yaml(args.input_file)
+
+    # Sezioni principali (sicure anche se mancanti)
+    assessment = raw.get("assessment", {})
+    client = raw.get("client", {})
+    assets = raw.get("assets", {})
+    constraints = raw.get("security_constraints", {})
+    metadata = raw.get("notes", {})
+
+    # === Override CLI ===
+    if args.client:
+        client["name"] = args.client
+
+    if args.category:
+        client["category"] = args.category
+
+    if args.network_range:
+        assets.setdefault("network", {})
+        assets["network"]["ranges"] = [args.network_range]
+
+    if args.web_domain:
+        assets.setdefault("web", {})
+        assets["web"]["domains"] = [args.web_domain]
+
+    if args.endpoints:
+        assets.setdefault("endpoints", {})
+        assets["endpoints"]["workstations"] = [
+            {"ip": ip.strip()} for ip in args.endpoints.split(",")
+        ]
+
+    if args.pos:
+        assets.setdefault("pos_systems", {})
+        assets["pos_systems"]["list"] = [
+            {"ip": ip.strip()} for ip in args.pos.split(",")
+        ]
+
+    # Stampa riepilogo (opzionale ma utile)
+    print_client_assets({
+        "client": client,
+        "assets": assets
+    })
+
+    return Context(
+        name=client.get("name", "UNKNOWN"),
+        category=client.get("category", "generic"),
+        assets=assets,
+        extra={
+            "assessment": assessment,
+            "constraints": constraints,
+            "notes": metadata
+        }
+    )
+
 
 def main():
    parser = argparse.ArgumentParser(

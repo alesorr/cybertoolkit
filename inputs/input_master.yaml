@@ -1,0 +1,91 @@
+assessment:
+  id: A-2025-001
+  type: vulnerability_assessment   # vulnerability_assessment | pentest | audit | red_team
+  scope: internal                  # internal | external | hybrid
+  date: 2025-05-01
+  analyst: your_name
+  confidentiality: restricted
+
+client:
+  name: Hotel Bella Vista
+  category: hotel                  # hotel | restaurant | pmi | enterprise | ecommerce
+  legal_entity: Hotel Bella Vista S.r.l.
+  vat_number:
+  location:
+    city: Napoli
+    country: IT
+  contact:
+    name:
+    email:
+    phone:
+
+assets:
+  network:
+    ranges:
+      - 192.168.1.0/24
+    gateways:
+      - 192.168.1.1
+    segmentation: false
+    wifi:
+      enabled: true
+      guest_network: true
+      notes:
+
+  endpoints:
+    servers:
+      - ip: 192.168.1.10
+        role: web_server
+        os:
+        criticality: high
+    workstations:
+      - ip: 192.168.1.34
+        user:
+        os:
+        criticality: medium
+
+  web:
+    domains:
+      - hotelbellavista.it
+    technologies:
+      cms:
+      framework:
+      server:
+    login_areas:
+      admin_panel: true
+      booking_portal: true
+    notes:
+
+  pos_systems:
+    enabled: true
+    list:
+      - ip: 192.168.1.34
+        vendor:
+        model:
+        pci_scope: true
+
+  third_party_services:
+    - name:
+      type: payment_gateway
+      criticality: high
+
+security_constraints:
+  allowed_testing_hours:
+    start: "22:00"
+    end: "06:00"
+  excluded_assets:
+    - ip:
+      reason:
+  social_engineering_allowed: false
+  dos_testing_allowed: false
+
+deliverables:
+  report_format:
+    - pdf
+    - docx
+  severity_model: cvss_v3
+  executive_summary: true
+  technical_details: true
+  remediation_plan: true
+
+notes: >
+  Cliente del settore hospitality con presenza di POS e rete Wi-Fi guest.

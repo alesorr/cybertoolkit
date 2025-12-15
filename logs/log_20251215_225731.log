@@ -1,0 +1,20 @@
+[+] Assessment completato
+
+[STEP] network.network.discovery
+Status : error
+Summary: Host discovery eseguita su None
+--------------------------------------------------
+[STEP] network.network.portscan
+Status : error
+Summary: Port scan TCP su 192.168.1.1
+--------------------------------------------------
+[STEP] web.web.web_enum
+Status : error
+Summary: Nessun dominio web fornito
+--------------------------------------------------
+
+=== MITRE TECHNIQUES ===
+
+=== RISK SUMMARY ===
+Score: 0
+Level: NONE
