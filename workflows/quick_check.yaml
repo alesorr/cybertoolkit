@@ -1,0 +1,9 @@
+name: Quick Security Check
+scope: Free Scan
+mitre_scope:
+ - Discovery
+ - Initial Access
+steps:
+ - network.network.discovery
+ - network.network.portscan
+ - web.web.web_enum

@@ -1,0 +1,15 @@
+name: Hotel & Restaurant Security Assessment
+mitre_scope:
+ - Discovery
+ - Initial Access
+ - Execution
+ - Lateral Movement
+ - Command and Control
+ - Impact
+steps:
+ - network.network.discovery
+ - network.network.segmentation
+ - web.web.web_enum
+ - web.web.tls_enum
+ - pos.pos.pos_enum
+ - exploits.exploits.metasploit_check

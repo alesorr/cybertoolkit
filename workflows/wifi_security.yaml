@@ -1,0 +1,10 @@
+name: Wi-Fi Security Assessment
+scope: Specialized
+mitre_scope:
+ - Discovery
+ - Lateral Movement
+ - Command and Control
+steps:
+ - network.network.discovery
+ - network.network.segmentation
+ - network.network.egress

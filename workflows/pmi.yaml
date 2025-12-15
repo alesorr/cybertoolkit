@@ -1,0 +1,14 @@
+name: PMI security Assessment
+mitre_scope:
+ - Discovery
+ - Initial Access
+ - Execution
+ - Persistence
+ - Defense Evasion
+ - Impact
+steps:
+ - network.network.discovery
+ - network.network.portscan
+ - endpoint.endpoint.os_check
+ - web.web.web_enum
+ - exploits.exploits.metasploit_check

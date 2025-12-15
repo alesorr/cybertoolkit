@@ -1,0 +1,12 @@
+name: Ransomware Readiness Assessment
+scope: Risk-focused
+mitre_scope:
+ - Initial Access
+ - Execution
+ - Defense Evasion
+ - Impact
+steps:
+ - network.network.portscan
+ - endpoint.endpoint.os_check
+ - compliance.compliance.backup_check
+ - exploits.exploits.metasploit_check

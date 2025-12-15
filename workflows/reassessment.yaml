@@ -1,0 +1,9 @@
+name: Periodic Security Reassessment
+scope: Monitoring
+mitre_scope:
+ - Discovery
+ - Initial Access
+ - Impact
+steps:
+ - network.network.discovery
+ - network.network.portscan

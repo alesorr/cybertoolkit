@@ -1,0 +1,12 @@
+name: POS Hardening & Security
+scope: Improvement
+mitre_scope:
+ - Execution
+ - Persistence
+ - Credential Access
+ - Impact
+steps:
+ - pos.pos.pos_enum
+ - pos.pos.pos_validation
+ - endpoint.endpoint.os_check
+ - compliance.compliance.pci_dss_light

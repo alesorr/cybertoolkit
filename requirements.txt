@@ -1,0 +1,15 @@
+requests
+beautifulsoup4
+lxml
+python-dotenv
+colorama
+tqdm
+rich
+tabulate
+pandas
+numpy
+matplotlib
+scapy
+sqlalchemy
+psutil
+pyyaml
