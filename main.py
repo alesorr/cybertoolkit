@@ -7,13 +7,6 @@ from core.orchestrator import Orchestrator
 import os
 from datetime import datetime
 
-def ensure_logs_folder():
-    os.makedirs("logs", exist_ok=True)
-
-def get_log_filename():
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    return f"logs/log_{timestamp}.log"
-
 def load_yaml(path):
    with open(path, "r") as f:
        return yaml.safe_load(f)
@@ -91,6 +84,7 @@ def build_context(args):
     assessment = raw.get("assessment", {})
     client = raw.get("client", {})
     assets = raw.get("assets", {})
+    #print(f"ASSET {assets}")
     constraints = raw.get("security_constraints", {})
     metadata = raw.get("notes", {})
 
@@ -140,58 +134,52 @@ def build_context(args):
 
 
 def main():
-   parser = argparse.ArgumentParser(
-       description="CyberToolkit - MITRE-based Security Assessment"
-   )
-   parser.add_argument(
-       "--workflow",
-       required=True,
-       help="Path del workflow YAML"
-   )
-   parser.add_argument(
-       "--input-file",
-       help="File YAML con parametri cliente"
-   )
-   parser.add_argument("--client", help="Nome cliente")
-   parser.add_argument(
-       "--category",
-       choices=["pmi", "negozio", "hotel", "ristorante"],
-       help="Categoria cliente"
-   )
-   parser.add_argument("--network_range", help="Network target (CIDR)")
-   parser.add_argument("--web_domain", help="Sito web target")
-   parser.add_argument("--endpoints", help="IP endpoint separati da virgola")
-   parser.add_argument("--pos", help="IP POS separati da virgola")
-   args = parser.parse_args()
-   workflow = load_yaml(args.workflow)
-   context = build_context(args)
-   category = "" if args.category is None else args.category
-   orchestrator = Orchestrator(context, category)
-   print(f"\n[*] Avvio assessment per {context}")
-   print(f"[*] Workflow: {workflow.get('name')}\n")
-   output = orchestrator.run(workflow)
-   results = output["results"]
-   print(results)
-   mitre_hits = output["mitre_observed"]
-   risk = output["risk_score"]
-   report = output["report"]  # opzionale se ti serve
-   
-   ensure_logs_folder()
-   log_file = get_log_filename()
-   write_log(log_file, results, mitre_hits, risk)
+    parser = argparse.ArgumentParser(
+        description="CyberToolkit - MITRE-based Security Assessment"
+    )
+    parser.add_argument("--workflow", required=True, help="Path del workflow YAML")
+    parser.add_argument("--input-file", help="File YAML con parametri cliente")
+    parser.add_argument("--client", help="Nome cliente")
+    parser.add_argument(
+        "--category",
+        choices=["pmi", "negozio", "hotel", "ristorante"],
+        help="Categoria cliente"
+    )
+    parser.add_argument("--network_range", help="Network target (CIDR)")
+    parser.add_argument("--web_domain", help="Sito web target")
+    parser.add_argument("--endpoints", help="IP endpoint separati da virgola")
+    parser.add_argument("--pos", help="IP POS separati da virgola")
+    args = parser.parse_args()
 
-   print("[+] Assessment completato\n")
-   print("=== RISULTATI ===")
-   for step_name, step_result in results.items():
-    status = step_result.get("status", "unknown")
-    print(f"- {step_name}: {status}")
+    # Carica workflow e contesto
+    workflow = load_yaml(args.workflow)
+    context = build_context(args)
 
-   print("\n=== MITRE TECHNIQUES ===")
-   for t in mitre_hits:
-       print(f"- {t}")
-   print("\n=== RISK SUMMARY ===")
-   print(f"Score: {risk['score']}")
-   print(f"Level: {risk['level']}")
+    print(f"\n[*] Avvio assessment per {context}")
+    print(f"[*] Workflow: {workflow.get('name')}\n")
+
+    # Passa direttamente l'oggetto Context
+    orchestrator = Orchestrator(context)
+    output = orchestrator.run(workflow)
+
+    results = output["results"]
+    mitre_hits = output["mitre_observed"]
+    risk = output["risk_score"]
+    report = output["report"]
+    
+    # Output CLI
+    print("[+] Assessment completato\n")
+    print("=== RISULTATI ===")
+    for step_name, step_result in results.items():
+        print(f"- {step_name}: {step_result.get('status', 'unknown')}")
+
+    print("\n=== MITRE TECHNIQUES ===")
+    for t in mitre_hits:
+        print(f"- {t}")
+
+    print("\n=== RISK SUMMARY ===")
+    print(f"Score: {risk['score']}")
+    print(f"Level: {risk['level']}")
 
 if __name__ == "__main__":
    main()

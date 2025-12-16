@@ -1,0 +1,27 @@
+[STEP] network.network.discovery
+Status : partial
+Summary: Network discovery ed enumerazione iniziale completate su 192.168.1.252
+[STEP] network.network.discovery
+Status : error
+Summary: Step fallito: 'dict' object has no attribute 'strip'
+--------------------------------------------------
+[STEP] network.network.segmentation
+Status : error
+Summary: Verifica segmentazione e routing di rete
+--------------------------------------------------
+[STEP] web.web.web_enum
+Status : error
+Summary: Nessun dominio web fornito
+--------------------------------------------------
+[STEP] web.web.tls_enum
+Status : error
+Summary: Nessun dominio per TLS enum
+--------------------------------------------------
+[STEP] pos.pos.pos_enum
+Status : error
+Summary: Step fallito: unindent does not match any outer indentation level (pos.py, line 36)
+--------------------------------------------------
+[STEP] exploits.exploits.metasploit_check
+Status : error
+Summary: Nessun target per Metasploit
+--------------------------------------------------

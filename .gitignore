@@ -1,0 +1,15 @@
+logs/*.log
+venv/
+__pycache__/
+*.pyc
+.DS_Store
+reports/
+*.report
+temp/
+*.tmp
+*.bak
+*.swp
+.idea/
+.vscode/
+.env
+.env.*

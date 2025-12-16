@@ -1,0 +1,47 @@
+[STEP] network.network.discovery
+Status : success
+Summary: Host discovery eseguita su 192.168.1.0/24
+Raw output:
+Starting Nmap 7.98 ( https://nmap.org ) at 2025-12-16 00:59 +0100
+Nmap scan report for vodafone.station (192.168.1.1)
+Host is up (0.00095s latency).
+Nmap scan report for C610A-IP.station (192.168.1.3)
+Host is up (0.0025s latency).
+Nmap scan report for Access.station (192.168.1.4)
+Host is up (1.0s latency).
+Nmap scan report for 192.168.1.13
+Host is up (1.1s latency).
+Nmap scan report for 192.168.1.35
+Host is up (1.1s latency).
+Nmap scan report for 192.168.1.37
+Host is up (0.00011s latency).
+Nmap scan report for iPhone-di-Leo.station (192.168.1.45)
+Host is up (1.1s latency).
+Nmap scan report for 192.168.1.250
+Host is up (0.011s latency).
+Nmap scan report for iMac-di-Alex.station (192.168.1.252)
+Host is up (0.00045s latency).
+Nmap scan report for 192.168.1.254
+Host is up (1.0s latency).
+Nmap done: 256 IP addresses (10 hosts up) scanned in 67.39 seconds
+--------------------------------------------------
+[STEP] network.network.segmentation
+Status : error
+Summary: Verifica segmentazione e routing di rete
+--------------------------------------------------
+[STEP] web.web.web_enum
+Status : error
+Summary: Nessun dominio web fornito
+--------------------------------------------------
+[STEP] web.web.tls_enum
+Status : error
+Summary: Nessun dominio per TLS enum
+--------------------------------------------------
+[STEP] pos.pos.pos_enum
+Status : error
+Summary: Step fallito: unindent does not match any outer indentation level (pos.py, line 36)
+--------------------------------------------------
+[STEP] exploits.exploits.metasploit_check
+Status : error
+Summary: Nessun target per Metasploit
+--------------------------------------------------

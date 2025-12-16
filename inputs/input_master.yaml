@@ -24,7 +24,7 @@ assets:
     ranges:
       - 192.168.1.0/24
     gateways:
-      - 192.168.1.1
+      - 192.168.1.252
     segmentation: false
     wifi:
       enabled: true
@@ -33,12 +33,12 @@ assets:
 
   endpoints:
     servers:
-      - ip: 192.168.1.10
+      - ip: 192.168.1.252
         role: web_server
         os:
         criticality: high
     workstations:
-      - ip: 192.168.1.34
+      - ip: 192.168.1.252
         user:
         os:
         criticality: medium
@@ -58,7 +58,7 @@ assets:
   pos_systems:
     enabled: true
     list:
-      - ip: 192.168.1.34
+      - ip: 192.168.1.252
         vendor:
         model:
         pci_scope: true

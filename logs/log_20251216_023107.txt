@@ -1,0 +1,26 @@
+[STEP] network.network.discovery
+Status : success
+Summary: Discovery iterativa completata: 5 host analizzati su 192.168.1.0/24
+Raw output:
+{'host_discovery': {'command': 'nmap -sn 192.168.1.0/24', 'live_hosts': ['(192.168.1.1)', '(192.168.1.3)', '192.168.1.37', '192.168.1.250', '(192.168.1.252)'], 'count': 5, 'output': 'Starting Nmap 7.98 ( https://nmap.org ) at 2025-12-16 02:31 +0100\nNmap scan report for vodafone.station (192.168.1.1)\nHost is up (0.00071s latency).\nNmap scan report for C610A-IP.station (192.168.1.3)\nHost is up (0.0080s latency).\nNmap scan report for 192.168.1.37\nHost is up (0.00039s latency).\nNmap scan report for 192.168.1.250\nHost is up (0.0085s latency).\nNmap scan report for iMac-di-Alex.station (192.168.1.252)\nHost is up (0.00032s latency).\nNmap done: 256 IP addresses (5 hosts up) scanned in 21.88 seconds\n'}, 'key_ports': {'command': 'nmap -Pn -p 21,22,23,80,443,445,3389,3306,5432,8080 --open (192.168.1.1) (192.168.1.3) 192.168.1.37 192.168.1.250 (192.168.1.252)', 'output': ''}, 'service_detection': {'command': 'nmap -Pn -sV --version-light (192.168.1.1) (192.168.1.3) 192.168.1.37 192.168.1.250 (192.168.1.252)', 'output': ''}, 'os_fingerprint': {'command': 'nmap -Pn -O --osscan-guess (192.168.1.1) (192.168.1.3) 192.168.1.37 192.168.1.250 (192.168.1.252)', 'output': ''}}
+--------------------------------------------------
+[STEP] network.network.segmentation
+Status : error
+Summary: Verifica segmentazione e routing di rete
+--------------------------------------------------
+[STEP] web.web.web_enum
+Status : error
+Summary: Nessun dominio web fornito
+--------------------------------------------------
+[STEP] web.web.tls_enum
+Status : error
+Summary: Nessun dominio per TLS enum
+--------------------------------------------------
+[STEP] pos.pos.pos_enum
+Status : error
+Summary: Step fallito: unindent does not match any outer indentation level (pos.py, line 36)
+--------------------------------------------------
+[STEP] exploits.exploits.metasploit_check
+Status : error
+Summary: Nessun target per Metasploit
+--------------------------------------------------
