@@ -43,10 +43,77 @@ def run_with_progress(command: str, description: str):
 
     return proc.returncode, stdout, stderr
 
+# ==============================
+# Discovery Method [Multi-Phase]
+# ==============================
 def discovery(context):
     """
-    network.discovery
-    Iterative network discovery with progress visualization
+    Network Discovery & Initial Enumeration
+
+    Esegue una fase di discovery di rete utilizzando un approccio
+    iterativo e progressivo, ispirato alle best practice di
+    penetration testing professionale.
+
+    La funzione è progettata per:
+      - ridurre il rumore in rete
+      - limitare l'impatto operativo
+      - ottimizzare i tempi di esecuzione
+      - fornire risultati strutturati e tracciabili
+
+    L'attività di discovery è suddivisa in più fasi, eseguite in ordine:
+
+    1. Host Discovery
+       Identificazione degli host attivi all'interno della subnet target
+       senza effettuare scansioni di porte o tentativi di connessione.
+
+    2. Key Ports Scan
+       Scansione di un set ristretto di porte TCP ad alto valore
+       informativo (es. SSH, HTTP/S, SMB, RDP, DB), eseguita
+       esclusivamente sugli host precedentemente identificati come attivi.
+
+    3. Advanced Enumeration (Condizionale)
+       Attività di enumerazione avanzata (service detection, OS
+       fingerprinting, NSE scripts) eseguite solo se:
+         - gli host risultano interessanti
+         - i vincoli di sicurezza lo consentono
+         - l'impatto è considerato accettabile
+
+    Tutte le operazioni sono tracciate e corredate da indicatori di
+    avanzamento (progress bar) per garantire visibilità operativa
+    durante l'esecuzione.
+
+    Args:
+        context (Context):
+            Oggetto Context contenente:
+              - informazioni sul cliente
+              - asset di rete
+              - vincoli di sicurezza
+              - metadata dell'assessment
+
+    Returns:
+        dict:
+            Dizionario strutturato contenente:
+              - status (success | partial | error)
+              - raw:
+                  risultati completi per ciascuna fase
+              - summary:
+                  descrizione sintetica delle attività eseguite
+              - metadata:
+                  informazioni operative (target, host analizzati,
+                  timestamp, strategia adottata)
+
+    Notes:
+        - La funzione non esegue scansioni invasive sull'intera subnet.
+        - Gli scan avanzati sono limitati a un numero controllato di host.
+        - L'approccio è coerente con metodologie di penetration testing
+          riconosciute (PTES, OSSTMM, NIST SP 800-115).
+
+    Security Considerations:
+        - Le scansioni sono influenzate dai security_constraints
+          definiti nel Context.
+        - Le funzionalità potenzialmente impattanti (es. NSE scripts)
+          vengono abilitate solo se esplicitamente consentite.
+
     """
     from datetime import datetime
 
@@ -150,112 +217,6 @@ def discovery(context):
             "strategy": "iterative_with_progress"
         }
     }
-
-def _discovery(context):
-    """
-    network.discovery
-    Iterative network discovery (senior pentester approach)
-    """
-    import subprocess
-    from datetime import datetime
-
-    network_ranges = context.network_ranges()
-    if not network_ranges:
-        return {
-            "status": "error",
-            "raw": "",
-            "summary": "Nessun network range configurato"
-        }
-
-    target = network_ranges[0]
-    results = {}
-    overall_status = "success"
-
-    # =========================
-    # PHASE 1 – HOST DISCOVERY
-    # =========================
-    host_cmd = f"nmap -sn {target}"
-    host_proc = subprocess.run(
-        host_cmd, shell=True, capture_output=True, text=True
-    )
-
-    live_hosts = extract_live_hosts(host_proc.stdout)
-    results["host_discovery"] = {
-        "command": host_cmd,
-        "live_hosts": live_hosts,
-        "count": len(live_hosts),
-        "output": host_proc.stdout
-    }
-
-    if not live_hosts:
-        return {
-            "status": "success",
-            "raw": results,
-            "summary": f"Nessun host attivo trovato su {target}"
-        }
-
-    # Limite professionale
-    live_hosts = live_hosts[:20]
-    targets = " ".join(live_hosts)
-
-    # =========================
-    # PHASE 2 – KEY PORTS
-    # =========================
-    key_ports_cmd = (
-        f"nmap -Pn -p 21,22,23,80,443,445,3389,3306,5432,8080 "
-        f"--open {targets}"
-    )
-
-    key_ports_proc = subprocess.run(
-        key_ports_cmd, shell=True, capture_output=True, text=True
-    )
-
-    results["key_ports_scan"] = {
-        "command": key_ports_cmd,
-        "output": key_ports_proc.stdout
-    }
-
-    # =========================
-    # PHASE 3 – ADVANCED SCANS (CONDITIONAL)
-    # =========================
-    advanced_profiles = {
-        "service_detection": f"nmap -Pn -sV --version-light {targets}",
-        "os_fingerprint": f"nmap -Pn -O --osscan-guess {targets}"
-    }
-
-    if context.is_dos_testing_allowed():
-        advanced_profiles["safe_scripts"] = (
-            f"nmap -Pn -sC --script safe {targets}"
-        )
-
-    for name, cmd in advanced_profiles.items():
-        proc = subprocess.run(
-            cmd, shell=True, capture_output=True, text=True
-        )
-        results[name] = {
-            "command": cmd,
-            "output": proc.stdout
-        }
-
-    # =========================
-    # FINAL RESPONSE
-    # =========================
-    return {
-        "status": overall_status,
-        "raw": results,
-        "summary": (
-            f"Discovery iterativa completata: "
-            f"{len(live_hosts)} host analizzati su {target}"
-        ),
-        "metadata": {
-            "target": target,
-            "hosts_analyzed": live_hosts,
-            "timestamp": datetime.utcnow().isoformat(),
-            "strategy": "iterative_host_based_scan"
-        }
-    }
-
-
 
 def portscan(context):
    """
