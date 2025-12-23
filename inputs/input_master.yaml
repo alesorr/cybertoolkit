@@ -45,9 +45,9 @@ assets:
 
   web:
     domains:
-      - hotelbellavista.it
+      - sweetchristmas.it
     technologies:
-      cms:
+      cms: shopify
       framework:
       server:
     login_areas:

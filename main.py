@@ -67,7 +67,6 @@ def print_client_assets(data: dict) -> None:
         print(f" - {p.get('ip')}")
 
     print("\n" + "=" * 60)
-
     
 def build_context(args):
     """
@@ -132,7 +131,6 @@ def build_context(args):
         }
     )
 
-
 def main():
     parser = argparse.ArgumentParser(
         description="CyberToolkit - MITRE-based Security Assessment"
@@ -166,7 +164,7 @@ def main():
     mitre_hits = output["mitre_observed"]
     risk = output["risk_score"]
     report = output["report"]
-    
+
     # Output CLI
     print("[+] Assessment completato\n")
     print("=== RISULTATI ===")

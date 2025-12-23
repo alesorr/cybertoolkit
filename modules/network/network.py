@@ -238,7 +238,7 @@ def segmentation(context):
    Verifica segmentazione / percorsi di rete
    """
    target_ip = context.assets.get("gateway_ip", "192.168.1.1")
-   cmd = f"tracert -d {target_ip}"
+   cmd = f"traceroute -d {target_ip}"
    result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
    return {
        "status": "success" if result.returncode == 0 else "error",

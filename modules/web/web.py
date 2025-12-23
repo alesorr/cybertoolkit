@@ -9,7 +9,7 @@ def web_enum(context):
    web.web_enum
    Enumerazione base servizi web
    """
-   domain = context.assets.get("web_domain")
+   domain = context.web_domains()
    if not domain:
        return {
            "status": "error",
@@ -29,7 +29,7 @@ def tls_enum(context):
    web.tls_enum
    Enumerazione TLS / SSL
    """
-   domain = context.assets.get("web_domain")
+   domain = context.web_domains()
    if not domain:
        return {
            "status": "error",

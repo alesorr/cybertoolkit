@@ -13,3 +13,4 @@ temp/
 .vscode/
 .env
 .env.*
+.txt

@@ -5,6 +5,7 @@ from core.report_engine import generate_report
 from core.context import Context
 import os
 import yaml
+import json
 from datetime import datetime
 
 class Orchestrator:
@@ -30,11 +31,35 @@ class Orchestrator:
             f.write(f"[STEP] {step_name}\n")
             f.write(f"Status : {step_result.get('status', 'unknown')}\n")
             f.write(f"Summary: {step_result.get('summary', '')}\n")
-            raw = step_result.get("raw", "")
+            raw = step_result.get("raw", None)
             if raw:
                 f.write("Raw output:\n")
-                f.write(yaml.dump(raw, sort_keys=False))
-                f.write("\n")
+                # ============================
+                # 1️⃣ Caso: RAW = Dizionario
+                # ============================
+                if isinstance(raw, dict):
+                    for key, value in raw.items():
+                        f.write(f"\n- {key}:\n")
+                        try:
+                            f.write(yaml.dump(value, sort_keys=False, allow_unicode=True))
+                        except:
+                            f.write(str(value) + "\n")
+                # ============================
+                # 2️⃣ Caso: RAW = Lista
+                # ============================
+                elif isinstance(raw, list):
+                    for i, item in enumerate(raw, 1):
+                        f.write(f"\n[{i}] ")
+                        if isinstance(item, dict):
+                            f.write("\n")
+                            f.write(yaml.dump(item, sort_keys=False, allow_unicode=True))
+                        else:
+                            f.write(str(item) + "\n")
+                # ============================
+                # 3️⃣ Qualsiasi altra cosa
+                # ============================
+                else:
+                    f.write(str(raw) + "\n")
             f.write("-" * 50 + "\n")
 
     def run(self, workflow: dict) -> dict:

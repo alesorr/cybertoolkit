@@ -1,0 +1,112 @@
+[STEP] network.network.discovery
+Status : success
+Summary: Discovery iterativa completata: 5 host analizzati su 192.168.1.0/24
+Raw output:
+host_discovery:
+  command: nmap -sn 192.168.1.0/24
+  live_hosts:
+  - (192.168.1.1)
+  - (192.168.1.3)
+  - 192.168.1.37
+  - 192.168.1.250
+  - (192.168.1.252)
+  count: 5
+  output: 'Starting Nmap 7.98 ( https://nmap.org ) at 2025-12-23 01:09 +0100
+
+    Nmap scan report for vodafone.station (192.168.1.1)
+
+    Host is up (0.00067s latency).
+
+    Nmap scan report for C610A-IP.station (192.168.1.3)
+
+    Host is up (0.0072s latency).
+
+    Nmap scan report for 192.168.1.37
+
+    Host is up (0.00022s latency).
+
+    Nmap scan report for 192.168.1.250
+
+    Host is up (0.0083s latency).
+
+    Nmap scan report for iMac-di-Alex.station (192.168.1.252)
+
+    Host is up (0.000097s latency).
+
+    Nmap done: 256 IP addresses (5 hosts up) scanned in 18.52 seconds
+
+    '
+key_ports:
+  command: nmap -Pn -p 21,22,23,80,443,445,3389,3306,5432,8080 --open (192.168.1.1)
+    (192.168.1.3) 192.168.1.37 192.168.1.250 (192.168.1.252)
+  output: ''
+service_detection:
+  command: nmap -Pn -sV --version-light (192.168.1.1) (192.168.1.3) 192.168.1.37 192.168.1.250
+    (192.168.1.252)
+  output: ''
+os_fingerprint:
+  command: nmap -Pn -O --osscan-guess (192.168.1.1) (192.168.1.3) 192.168.1.37 192.168.1.250
+    (192.168.1.252)
+  output: ''
+
+--------------------------------------------------
+[STEP] network.network.segmentation
+Status : success
+Summary: Verifica segmentazione e routing di rete
+Raw output:
+' 1  vodafone (192.168.1.1)  1.245 ms  0.811 ms  0.852 ms
+
+  '
+
+--------------------------------------------------
+[STEP] web.web.web_enum
+Status : success
+Summary: Enumerazione web su ['sweetchristmas.it']
+Raw output:
+'Starting Nmap 7.98 ( https://nmap.org ) at 2025-12-23 01:09 +0100
+
+  Nmap done: 0 IP addresses (0 hosts up) scanned in 1.09 seconds
+
+  '
+
+--------------------------------------------------
+[STEP] web.web.tls_enum
+Status : success
+Summary: Enumerazione TLS / cifrari
+Raw output:
+'Starting Nmap 7.98 ( https://nmap.org ) at 2025-12-23 01:09 +0100
+
+  Nmap done: 0 IP addresses (0 hosts up) scanned in 1.08 seconds
+
+  '
+
+--------------------------------------------------
+[STEP] pos.pos.pos_enum
+Status : success
+Summary: Enumerati 1 POS
+Raw output:
+- ip: 192.168.1.252
+  reachable: true
+  vendor: null
+  model: null
+  pci_scope: true
+  stdout: 'PING 192.168.1.252 (192.168.1.252): 56 data bytes
+
+    64 bytes from 192.168.1.252: icmp_seq=0 ttl=64 time=0.216 ms
+
+
+    --- 192.168.1.252 ping statistics ---
+
+    1 packets transmitted, 1 packets received, 0.0% packet loss
+
+    round-trip min/avg/max/stddev = 0.216/0.216/0.216/nan ms'
+
+--------------------------------------------------
+[STEP] exploits.exploits.metasploit_check
+Status : success
+Summary: Metasploit vulnerability scan completato su 192.168.1.252
+Raw output:
+"{\n    \"target\": \"192.168.1.252\",\n    \"found_cves\": [],\n    \"checks\": []\n\
+  }"
+
+--------------------------------------------------
