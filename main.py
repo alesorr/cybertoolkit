@@ -174,7 +174,11 @@ def main():
     print("\n=== MITRE TECHNIQUES ===")
     for t in mitre_hits:
         print(f"- {t}")
-
+   
+    print("\n=== REPORT GENERATION ===")
+    # Qui ci va il metodo per la generazione del report
+    # PDF con tutto cio che ne consegue in termini di formattazione
+   
     print("\n=== RISK SUMMARY ===")
     print(f"Score: {risk['score']}")
     print(f"Level: {risk['level']}")
